@@ -9,6 +9,10 @@
 apiVersion: v2
 replicaCount: 2
 
+rollingUpdate: 
+  maxUnavailable: 1                           
+  maxSurge: 1
+
 image:
   # image.repository -- Container Image containing the juice-shop
   repository: docker.io/bkimminich/juice-shop
@@ -16,6 +20,10 @@ image:
   # @default -- defaults to the appVersion
   tag: null
   pullPolicy: IfNotPresent
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 20
 
 imagePullSecrets: []
 nameOverride: ""
@@ -25,7 +33,9 @@ fullnameOverride: ""
 labels: {}
 
 # -- add annotations to the deployment, service and pods
-annotations: {}
+annotations: {  
+  prometheus.io/scrape: 'true',
+  }
 
 podSecurityContext: {}
   # fsGroup: 2000
@@ -65,11 +75,11 @@ resources:
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
    limits:
-     cpu: 100m
-     memory: 128Mi
+     cpu: 200m
+     memory: 256Mi
    requests:
-     cpu: 100m
-     memory: 128Mi
+     cpu: 200m
+     memory: 256Mi
 
 nodeSelector: {}
 
